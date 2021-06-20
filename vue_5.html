@@ -5,38 +5,82 @@
 		<meta charset="UTF-8">
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<style>
-			.box{width:200px; height:200px; background:green; border:2px solid black; text-align:center; line-height:200px; color:white;}
-			.hidden{display:none;}
+			.box{
+				width:200px; 
+				height:200px; 
+				background:green; 
+				border:2px solid black; 
+				text-align:center; 
+				line-height:200px; 
+				color:white;
+			}
+			.hidden{
+				display:none;
+			}
+
+			.box2{
+				width: 100px;
+				height: 100px;
+				padding: 20px;
+				background-color: red;
+				text-align: center;
+				color:blanchedalmond;
+			}
+			.expand{
+				height:200px;
+				transition: all .4s ease-in-out;
+			}
+
 		</style>
 	</head>
 	<body>
 	
 	<div id="app">
-		<div v-bind:class="{box:true, hidden:boxHidden}">{{message}}</div>
-		<button v-on:click="showhide();">Click</button>
+		<div v-bind:class="{box:true, hidden:boxHidden}" >{{message}}</div>
+		<button v-on:click="showhide();">{{ btnMsg }}</button>
+	</div>
+	<br>
+	<div id="app2">
+		<div v-bind:class="{box2:true, expand:makeBig}" v-on:mouseover="updateHeight();"></div>
 	</div>
 	
 	<script>
 	var app = new Vue({
 		el: '#app',
-		
 		data:{
 			boxHeight:200,
 			boxHidden : false,
-			message  : 'Make me disappear!'
+			message  : 'Make me disappear!',
+			btnMsg : 'Hide' //button message 
 		},
 		methods:{
 			showhide : function(){
-				console.log(this.boxHidden);
+				//console.log(this.boxHidden);
 				if(this.boxHidden){
 					this.boxHidden=false;
+					this.btnMsg = 'Hide'; //btn message changes on click
 				}else{
-					this.boxHidden=true;	
+					this.boxHidden=true;
+					this.btnMsg = 'Show'; //btn message changes on click
 				}
 			}
 		}
 		
 	});
+
+	var app2 = new Vue ({
+		el: '#app2',
+		data:{
+			boxH: 100,
+			message: 'Make me taller',
+			makeBig: false
+		},
+		methods: {
+			updateHeight: function(){
+				this.makeBig = true;
+			}
+		}
+	})
 	</script>
 	<!--
 		Step 1: Read the code above

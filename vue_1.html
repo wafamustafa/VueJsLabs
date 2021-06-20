@@ -5,7 +5,16 @@
 		<meta charset="UTF-8">
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<style>
-			.container{background:#cecece;}
+			.container{
+					background:#cecece;
+			}
+			.yellowb {
+				border: yellow 4px solid;
+			}
+			.imageSize {
+				width: 400px;
+				height: 400px;
+			}
 		</style>
 	</head>
 	<body>
@@ -17,30 +26,29 @@
 		//step 3: notice how the class is set for the span to "container"
 		
 		v-bind:html_attribute_key="data_object_property"
-		
 		or 
-		
-		v-bind:html_attribute_key="'string_literal'"
-		
+		v-bind:html_attribute_key="'string_literal'
 		EXAMPLES
 		data properties
 			v-bind:style="newStyle"
 			v-bind:alt="newAlt"
-		
 		string literals
 			v-bind:href="'www.vuejs.org'"
 			v-bind:style="'display:block;margin-top:20px;'"
 			v-bind:alt="'New Alt Text'"
-		
 		WARNING: Vue.js doesn't like dynamically setting IDs. Try it!
-		
 		ASYNCHRONOUS LEARNING EXERCISE
 			1. Create an image and set the following attributes with Vue {src, alt, title}
 			2. Augment the span below to include another class called "highlight", which has a yellow border.
 		-->
-		<span v-bind:class="loadClass">
+
+
+		<span v-bind:class="[loadClass, border]"> 
 			look at me!
-		</span>
+		</span><br>
+
+		<!--We could also use a short hand version example:: "v-bind:src" could be used as ":src"-->
+		<img v-bind:src="image" v-bind:alt="imageAlt" v-bind:title="imageTitle" v-bind:class="imageStyle" />
 	</div>
 	
 	<script>
@@ -49,6 +57,12 @@
 		el: '#app',
 		data:{
 			loadClass : 'container',
+			border : 'yellowb', 
+			image : './images/kitty.png', //img source
+			imageAlt : 'picture of a cat waving',
+			imageTitle : 'grey tabby',
+			imageStyle : 'imageSize', //use the declared 'imageSize' in the stylesheet
+
 			//newStyle : 'font-size:30px;',
 			//newAlt : 'dynamically set alt!'
 			

@@ -5,16 +5,72 @@
 		<meta charset="UTF-8">
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<style>
-			.special {background:yellow; border: 1px dotted #fe0000; padding:30px; display:block; text-align:center;}
-			.important {font-weight:bold; font-size:30px;}
+			#app{
+				max-width: 500px;
+				margin: 0 auto;
+			}
+
+			/*	CSS FROM W3school with the link provided	*/
+			.card {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				background-color: rgb(245, 227, 255);
+				padding-top: 20px;
+				padding-bottom: 20px;
+				box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+				transition: 0.3s;
+				border-radius: 10px; /* 5px rounded corners */
+			}
 		</style>
 	</head>
 	<body>
-	
+	<!--using shorthand code-->
 	<div id="app">
+		<!--if there is profile with all the info show this profile card-->
 		<span v-if="profile">
-			Profile of {{profile.fname}} {{profile.lname}} 
+			<div class="card">
+				<!--profile picture-->
+				<div>
+					<img :src="profile.pic" :alt="profile.alt" style="width:200px">
+				</div>
+				<!--profile info-->
+				<div class="container">
+					<h4>
+						<b>
+							<span>{{ profile.fname }}</span>
+							<span>{{ profile.lname }}</span>
+						</b>
+					</h4>
+					<!--example to show is desc is not available-->
+				  	<p><span v-if="profile.desc">{{ profile.desc }}</span></p>
+					<p><span v-else>NO DESCRIPTION AVAILABLE</span></p><!--not showing up i dont know why!?-->
+					<p><span>{{ profile.bio }}</span></p>
+				</div>
+			</div>
 		</span>
+		<!--else if there is unknow with all the info show this profile card-->
+		<span v-else-if="unknown">
+			<div class="card">
+				<div>
+					<!--else-if -->
+					<div>
+						<img :src="unknown.pic" :alt="unknown.alt" style="width:200px">
+					</div>
+				</div>
+				<div class="container">
+					<h4>
+						<b>
+							<span>{{ unknown.fname }}</span>
+							<span>{{ unknown.lname }}</span>
+						</b>
+					</h4>
+					<p><span>{{ unknown.desc }}</span></p>
+					<p><span>{{ unknown.bio }}</span></p>
+				</div>
+			</div>
+		</span>
+		<!--if no info display this message-->
 		<span v-else>
 			No Profile Data found.
 		</span>
@@ -23,14 +79,25 @@
 	<script>
 	var app = new Vue({
 		el: '#app',
-		
 		data:{
-			/*
 			profile:{
+				fname: "Wafa",
+				lname: "Mustafa",
+				desc: "Humber Student",
+				bio: "Painting the web with beautiful CSS",
+				pic: "./images/wafa.png",
+				alt: "Picture of Wafa M"
+
+			},
+			unknown:{
 				fname: "John",
-				lname: "Doe"	
+				lname: "Doe",
+				desc: "Questionable man",
+				bio: "never to be seen",
+				pic: "./images/unknown.png",
+				alt: "Missing image"
+
 			}
-			*/
 		}
 		
 	});
