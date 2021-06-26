@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        body {
+            background-color: rgb(245, 244, 247);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .title{
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        .mainGame{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+        .yourOptions{
+            margin-right: 3em;
+        }
+        .compOptions{
+            margin-left: 3em;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="title">Rock . Paper . Scissor</div>
+        <div class="mainGame">
+            <div class="yourOptions">
+                <!--
+                    - click event to pick users choice
+                    - use v-bind:class and add in functionality 
+                        - IF (yourWeapon == 'Rock'){
+                            var rock = document.getElementByClass('r');
+                            rock = true;
+                        } else {
+                            rock = false;
+                        }
+                    - do short code on all bind class
+                -->
+                <div class="r" :class="yourWeapon == 'Rock' ? 'checked' : ''" @click="changeWeapon('Rock')">
+                    <img src="img/rock.png" alt="rock hand" width="100px"/>
+                </div>
+                <div class="p" :class="yourWeapon == 'Paper' ? 'checked' : ''" @click="changeWeapon('Paper')">
+                    <img src="img/paper.png" alt="paper hand" width="100px"/>
+                </div>
+                <div class="s" :class="yourWeapon == 'Scissor' ? 'checked' : ''" @click="changeWeapon('Scissor')">
+                    <img src="img/scissor.png" alt="scissor hand" width="100px"/>
+                </div>
+            </div>
+            <!--
+                show options for the user
+            -->
+            <div class="game">
+                <!--v-if is NOT yourWeapon (meaning if its blank) then show message "Choose your weapon"-->
+                <div class="chooseWeapon" v-if="!yourWeapon">Pick your Weapon</div>
+                <!--
+                    if you have picked you weapon but there is no result show if the fighting property is true.
+                    bind a click event
+                -->
+                <div class="fight" v-if="yourWeapon && !result" v-show="!fighting" @click.once="fight" v-if="fig">Click to Fight</div>
+                <div class="fighting" v-if="fighting"></div>
+                <div class="result" :class="result" v-if="result">{{result.toUpperCase()}}</div>
+            </div>
+            <div class="compOptions">
+                <div v-show="computerWeapon === 'Rock'" class="r">
+                    <img src="img/rock.png" alt="rock hand" width="100px"/> 
+                </div>
+                <div v-show="computerWeapon === 'Paper'" class="p">
+                    <img src="img/paper.png" alt="paper hand" width="100px"/>
+                </div>
+                <div v-show="computerWeapon === 'Scissor'" class="s">
+                    <img src="img/scissor.png" alt="scissor hand" width="100px"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            options: ['Rock', 'Paper', 'Scissor'], //options comp can pick from 
+            yourWeapon: '', //users choice
+            computerWeapon: '', //comps choice
+            fighting : false, //fighting is false 
+        },
+        methods:{
+            fight(){
+                this.fighting = true;
+                this._pretendProcessing();
+            },
+
+            _fight(){
+                //assign a random value
+                //pick arandom number between 0 and 1 then multiple by the length 
+                //math.floor will round up
+                //match that value to the array of options 
+                //assign the option to computersWeapon
+                //SOURCE: Zuhair Mustafa to understand the concept
+                this.computerWeapon = this.options[Math.floor(Math.random() * this.options.length)]; 
+                if(this.yourWeapon === this.computerWeapon)
+                    this._draw();
+                if(this.computerWeapon === 'Rock'){
+                    if(this.yourWeapon === 'Paper'){
+                        this._win();
+                    }
+                    if(this.yourWeapon === 'Scissor'){
+                        this._lost();
+                    }
+                }
+                if(this.computerWeapon === 'Paper'){
+                    if(this.yourWeapon === 'Rock'){
+                        this._lost();
+                    }
+                    if(this.yourWeapon === 'Scissor'){
+                        this._win();
+                    }
+                }
+                if(this.computerWeapon === 'Scissor'){
+                    if(this.yourWeapon === 'Rock'){
+                        this._win();
+                    }
+                    if(this.yourWeapon === 'Paper'){
+                        this._lost();
+                    }
+                }
+            },
+            //click event for users choice
+            changeWeapon(weapon){
+                if(this.fighting)
+                    return;
+                //making is continus    
+                this.yourWeapon = weapon;
+                this.result = '';
+                this.computerWeapon = '';
+            },
+
+            //to show the user that computer is change weapons
+            _pretendProcessing(){
+                var x = 0;
+                var intervalID = setInterval(() =>{
+
+                    //keep running the three images until x is equal to ten 
+                    this.computerWeapon = this.options[Math.floor(Math.random() * this.options.length)];
+
+                    if (++x === 10) {
+                        window.clearInterval(intervalID); //clear the code once x is equal to 10
+                        this._fight(); //once x === 10 call a new method _fight
+                        this.fighting = false; //keep the fighting to false until weapon is chosen
+                    }
+                }, 100);//setting the interval by 100th of a second
+            },
+
+            _draw(){
+                this.result = 'draw';
+            },
+
+            _win(){
+                this.result = 'won';
+            },
+
+            _lost(){
+                this.result = 'lost';
+            }
+
+        }
+    });
+</script>
+</html>
